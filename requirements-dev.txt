@@ -1,0 +1,2 @@
+# Opcional: crear ejecutable Windows con PyInstaller (en la PC Windows).
+pyinstaller>=6,<7

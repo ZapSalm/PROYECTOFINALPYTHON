@@ -1,0 +1,15 @@
+SMART PARKING — PACK COMPLETO PARA GITHUB
+
+1) Lee README.md (descripcion, diagramas, instalacion, pruebas y seguridad).
+2) Abre diagramas/ (PNG y SVG editables).
+3) Codigo UNO: firmware/arduino_uno/.../Parqueo_UNO_4_Sensores.ino
+4) Codigo ESP32: firmware/esp32/.../Parqueo_ESP32_WiFi_Config.ino
+5) Antes de compilar ESP32: copia config_private.example.h a config_private.h,
+   edita claves privadas; este archivo se excluye automaticamente de Git.
+6) App Windows: aplicacion/monitor_parqueo.py y scripts *.cmd.
+7) Ejecuta pruebas: python aplicacion/PRUEBAS.py y python aplicacion/PRUEBAS_RED.py
+8) Verifica integridad: python herramientas/validar_repositorio.py
+9) Para publicar: documentacion/09_GIT_Y_GITHUB.md.
+
+No hay contrasenas personales en el pack.
+No se subio a GitHub automaticamente porque no se indico el repo de destino.

@@ -1,0 +1,26 @@
+name: Smart Parking - pruebas Python
+on:
+  push:
+  pull_request:
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Obtener codigo
+        uses: actions/checkout@v4
+      - name: Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Instalar libreria grafica del sistema
+        run: sudo apt-get update && sudo apt-get install -y python3-tk
+      - name: Verificar sintaxis
+        run: python -m py_compile aplicacion/monitor_parqueo.py
+      - name: Tests monitor (17)
+        working-directory: aplicacion
+        run: python PRUEBAS.py
+      - name: Tests red (9)
+        working-directory: aplicacion
+        run: python PRUEBAS_RED.py
+      - name: Comprobar pinout y secretos
+        run: python herramientas/validar_repositorio.py
