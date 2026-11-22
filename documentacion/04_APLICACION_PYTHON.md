@@ -1,22 +1,55 @@
 # 04 — Aplicación de escritorio Python
 
-## Tecnologías utilizadas
+## Dependencias
 
-- **Python 3.10+**.
-- **Tkinter / ttk**: ventana, tarjetas de información, formularios, acciones y gráficos integrados.
-- **urllib.request / urllib.parse / urllib.error**: HTTP GET/POST a los endpoints del ESP32, sin cliente externo.
-- **json**: parseo y validación de telemetría.
-- **socket / ipaddress / concurrent.futures**: identificación y búsqueda local del ESP32 en una subred `/24`.
-- **threading / queue**: consultas sin bloquear la interfaz gráfica.
-- **collections.deque**: historial acotado de lecturas.
-- **csv**: exportación de mediciones compatibles con Excel.
-- **datetime / time**: marcas temporales, tiempo encendido y refresco.
-- **pathlib / os**: archivo local con última dirección del ESP32.
-- **uuid**: identificador de correlación de cada instrucción.
-- **argparse**: opción `--demo`.
-- **PyInstaller**: **opcional**, solo para crear `.exe` Windows.
+| Uso | Requisitos |
+|---|---|
+| Abrir el ejecutable en Windows | `SmartParkingMonitorV4.exe` incluye el intérprete y los módulos que necesita el monitor. |
+| Ejecutar el código fuente | Python 3.10 o superior con Tcl/Tk. `requirements.txt` contiene cero paquetes de pip. |
+| Ejecutar las pruebas | La misma instalación de Python. El servidor simulado se comunica con el monitor en la propia computadora. |
+| Generar el ejecutable | Python para Windows, Tcl/Tk y PyInstaller 6.x, declarado en `requirements-dev.txt`. |
 
-No hace falta instalar `requests`, Flask, PyQt ni bases de datos para ejecutar este monitor.
+## Módulos del monitor y motivo de uso
+
+Todos los módulos de esta tabla forman parte de la biblioteca estándar. Las funciones indicadas corresponden a [monitor_parqueo.py](../aplicacion/monitor_parqueo.py).
+
+| Módulo | Uso concreto | Por qué se utiliza |
+|---|---|---|
+| `tkinter` | Ventana principal, botones, campos y gráficas de sensores con `Canvas`. | Proporciona una interfaz de escritorio y dibujo básico con Tcl/Tk. |
+| `tkinter.ttk` | Listas desplegables para seleccionar red, ESP32 y orden. | Un `Combobox` permite elegir opciones válidas y editar el SSID cuando corresponde. |
+| `tkinter.filedialog` | Selección de destino para CSV y reportes TXT. | Permite guardar las exportaciones en una carpeta elegida por el operador. |
+| `tkinter.messagebox` | Avisos de red, errores y confirmaciones de apertura o cierre. | Presenta el resultado de la operación en la propia ventana. |
+| `urllib.request` | `Request` y `build_opener` envían GET o POST con tiempo límite. `ProxyHandler({})` desactiva el proxy para estas consultas. | La aplicación se comunica directamente con el ESP32 en la LAN. |
+| `urllib.parse` | `urlsplit` separa host y puerto. `urlencode` prepara los campos de los POST. | Facilita validar la dirección y codificar SSID, contraseñas y parámetros de órdenes. |
+| `urllib.error` | Captura `HTTPError` y permite leer el cuerpo de una respuesta de error. | El monitor puede presentar detalles como una orden que el firmware devolvió con HTTP 409. |
+| `json` | Lee los objetos de telemetría, procesa respuestas de configuración y guarda el último host. | Usa el mismo formato de intercambio que la API del ESP32 y un formato legible para el ajuste local. |
+| `socket` | Identifica las direcciones IPv4 de la computadora y resuelve su nombre local. | La búsqueda del ESP32 parte de las redes que la computadora tiene disponibles. |
+| `ipaddress` | Valida direcciones, filtra interfaces y enumera hosts de una red `/24`. | Delimita las direcciones candidatas al segmento local que examina el monitor. |
+| `re` | Comprueba la sintaxis del nombre del ESP32. | Restringe los nombres ingresados a letras, números, puntos y guiones. |
+| `concurrent.futures` | `ThreadPoolExecutor` prueba IP candidatas en paralelo y `as_completed` recoge sus resultados. | Reduce el tiempo de descubrimiento cuando algunas direcciones agotan su tiempo de espera. |
+| `threading` | Ejecuta consultas y acciones de red en hilos de trabajo. | Permite que la ventana siga respondiendo mientras el monitor espera una respuesta. |
+| `queue` | `Queue` entrega resultados y errores de los hilos al bucle de Tkinter. | Mantiene las actualizaciones de los controles gráficos en el hilo de la interfaz. |
+| `collections` | `deque` conserva hasta 1,800 muestras y 350 eventos en memoria. | Limita el espacio ocupado y descarta las entradas más antiguas al superar el máximo. |
+| `csv` | Produce una tabla con marcas de tiempo, distancias, ocupación y estado del equipo. | Facilita abrir el historial en una hoja de cálculo. |
+| `datetime` | Fecha los eventos, las filas del historial y los archivos exportados. | Permite ordenar muestras y asociarlas con una hora de captura. |
+| `time` | `monotonic()` calcula el tiempo transcurrido para el modo demostración. | La simulación usa un reloj de intervalos que sigue avanzando si cambia la hora del sistema. |
+| `math` | `isfinite()` valida distancias y señal. `ceil()` calcula la escala vertical de la gráfica. | Mantiene valores numéricos inválidos fuera de los indicadores y de la gráfica. |
+| `pathlib` | Maneja rutas, directorios, archivos de preferencias y reportes. | Facilita leer y escribir archivos en las carpetas del sistema y del usuario. |
+| `os` | Consulta la variable de entorno `APPDATA` en Windows. | Ubica el archivo con el último host en la carpeta de datos del usuario. |
+| `uuid` | Genera el identificador corto incluido en cada orden enviada. | Permite comparar el identificador enviado con el que devuelve el ESP32 en su acuse. |
+| `argparse` | Procesa `--demo` y `--host`. | Permite seleccionar el modo de inicio o fijar el ESP32 desde la terminal. |
+
+## Módulos de pruebas y validación
+
+| Módulo | Uso |
+|---|---|
+| `unittest` | Ejecuta los 17 casos del monitor y los 9 casos de red. |
+| `http.server` | `ThreadingHTTPServer` y `BaseHTTPRequestHandler` simulan respuestas HTTP del ESP32 sin usar la maqueta. |
+| `tempfile` | Crea directorios temporales para comprobar archivos de configuración y CSV. |
+| `urllib.parse` | `parse_qs` interpreta el cuerpo de las solicitudes simuladas. |
+| `threading` y `json` | Mantienen la API de prueba en segundo plano y codifican sus respuestas. |
+| `csv`, `datetime` y `pathlib` | Comprueban las columnas, las fechas y los archivos exportados. |
+| `pathlib` y `re` | En `herramientas/validar_repositorio.py`, leen los archivos del proyecto y comprueban pinout, formatos y configuración. |
 
 ## Pantallas
 
@@ -34,25 +67,29 @@ No hace falta instalar `requests`, Flask, PyQt ni bases de datos para ejecutar e
 - **Órdenes**: `ping`, test de LED y apertura/cierre sujetos a validación del ESP32.
 - **Herramientas**: eventos, diagnósticos TXT, historial CSV y modo demostración.
 
-## Inicio
+## Ejecutar en Windows
 
-Abre un terminal en `aplicacion/`:
-
-```powershell
-py -3 monitor_parqueo.py
-```
-
-Modo sin hardware:
+Desde PowerShell en la raíz del proyecto, comprueba que la instalación de Python puede abrir una ventana de Tcl/Tk:
 
 ```powershell
-py -3 monitor_parqueo.py --demo
+py -3 -m tkinter
 ```
 
-También están disponibles `ABRIR_MONITOR.cmd` y `ABRIR_DEMO.cmd` para Windows. Si usas Python de Microsoft Store, verifica que tenga el módulo `tkinter`; las instalaciones estándar de python.org suelen incluirlo.
+Cierra la ventana de prueba y elige uno de estos modos:
 
-## Crear programa EXE
+```powershell
+# Monitor conectado al ESP32
+py -3 aplicacion/monitor_parqueo.py --host 192.168.4.1
 
-En Windows, ejecutar `CREAR_EJECUTABLE.cmd`: instala PyInstaller y empaqueta el monitor como `SmartParkingMonitorV4.exe`, luego intenta copiar el ejecutable al Escritorio. Necesita Internet si PyInstaller no está instalado. **Un ejecutable para Windows no puede considerarse construido hasta ejecutar ese script en Windows**.
+# Demostración con sensores simulados
+py -3 aplicacion/monitor_parqueo.py --demo
+```
+
+En Windows también puedes abrir `SmartParkingMonitorV4.exe`, `aplicacion/ABRIR_MONITOR.cmd` o `aplicacion/ABRIR_DEMO.cmd`. Consulta la [documentación de Tkinter](https://docs.python.org/3/library/tkinter.html) para verificar Tcl/Tk.
+
+## Generar el ejecutable
+
+Abre `aplicacion/CREAR_EJECUTABLE.cmd` en Windows. El script instala PyInstaller con `requirements-dev.txt`, agrupa el intérprete, Tcl/Tk y los módulos usados por la app en un solo `.exe`, y copia el resultado al Escritorio. El modo `--windowed` permite abrir el panel sin una consola de Python. Consulta [cómo empaqueta PyInstaller](https://www.pyinstaller.org/en/stable/operating-mode.html).
 
 ## Tratamiento de fallos
 

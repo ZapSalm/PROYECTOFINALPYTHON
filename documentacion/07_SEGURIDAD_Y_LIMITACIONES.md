@@ -16,17 +16,16 @@
 - Telemetría privada frente a cualquier cliente de la misma red; las rutas GET no están autenticadas.
 - Funcionamiento industrial o continuo sin pruebas de estrés.
 
-## Protección de secretos para GitHub
+## Manejo de credenciales
 
 - NO versionar SSID privado, contraseñas domésticas, `SP_AP_PASSWORD`, `SP_CONTROL_TOKEN`, `SP_OTA_PASSWORD` reales ni tokens enviados al dispositivo.
 - Usar `config_private.example.h` como plantilla y crear `config_private.h` en local. Este último está en `.gitignore`.
 - Nunca publicar capturas de configuración con contraseñas visibles. Las imágenes de este paquete son de demostración.
-- Si un secreto ya se publicó en algún lugar, cambiarlo/rotarlo; borrar el archivo de un commit posterior **no lo elimina del historial de Git**.
 - No publicar reportes TXT o CSV exportados de presentaciones si contienen información sensible de red/personas.
 
-## AP abierto por clave corta
+## Validación del punto de acceso
 
-En la versión del firmware de origen, una contraseña de AP con menos de 8 caracteres podía provocar un punto de acceso sin seguridad WPA2. El repositorio exige mediante `static_assert` que la clave AP tenga 8–63 caracteres. Esto no sustituye probar que Windows lo muestra como red **Segura**. Comprueba también el éxito de inicialización en el Monitor Serie.
+Configura `SP_AP_PASSWORD` con entre 8 y 63 caracteres ASCII. En la primera puesta en marcha, verifica que Windows muestre `SmartParking-Setup` como red protegida y que el monitor serie informe la dirección del punto de acceso.
 
 ## Para mejorar una versión posterior
 

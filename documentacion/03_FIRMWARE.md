@@ -29,9 +29,9 @@
 
 La línea `D12` del UNO conmuta entre 0 V y alta impedancia; el ESP32 usa `Serial2.begin(1200, SERIAL_8N1, 16, 17)` y solo conecta físicamente RX GPIO16. Es **imprescindible** la resistencia 4.7 kΩ hacia 3V3 en el receptor. Trama: `S1:87,S2:1970,S3:1973,S4:1955\n`.
 
-## Configuración Wi-Fi del ESP32 para GitHub
+## Credenciales locales del ESP32
 
-No hay credenciales reales en este repositorio. El sketch incluye:
+El sketch lee tres claves del archivo local indicado en esta línea:
 
 ```cpp
 #include "config_private.h"

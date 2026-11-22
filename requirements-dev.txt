@@ -1,2 +1,2 @@
-# Opcional: crear ejecutable Windows con PyInstaller (en la PC Windows).
+# Dependencia externa para generar SmartParkingMonitorV4.exe en Windows.
 pyinstaller>=6,<7

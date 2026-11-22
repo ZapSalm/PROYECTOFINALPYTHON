@@ -6,7 +6,7 @@
 
 **Modo STA**: el ESP32 se asocia al Wi-Fi o hotspot configurado desde Python, en banda **2.4 GHz**, obtiene IP por DHCP y la reporta mediante `/api/wifi/status`. La PC debe estar en la misma LAN sin aislamiento entre clientes. Las credenciales se conservan en NVS de `Preferences` para siguientes arranques.
 
-**No confundir IPs:** 192.168.4.1 es la AP interna del ESP32; la IP STA será asignada por el hotspot y puede cambiar. `192.168.1.18` fue una dirección de pruebas anterior, no una constante del proyecto.
+Usa `192.168.4.1` en la red de configuración. Al pasar al hotspot, consulta la IP asignada por DHCP y úsala en el monitor.
 
 ## Secuencia de cambio de red
 
@@ -18,7 +18,7 @@
 6. Conectar Windows al mismo hotspot y usar **Buscar ESP32 en la red** o introducir `ip_sta` manualmente.
 7. Probar `ping` autenticado y luego verificar las cuatro distancias.
 
-Si se equivoca en la clave, reconectar al AP y repetir. Si un AP quedó **abierto**, es posible que la contraseña del AP usada en el firmware tuviera menos de 8 caracteres: fijar y volver a instalar; no presentar así en público.
+Si la clave del hotspot es incorrecta, reconecta la computadora al punto de acceso de configuración y repite el proceso. Si `SmartParking-Setup` aparece como red abierta, comprueba `SP_AP_PASSWORD` y vuelve a cargar el firmware con la clave correcta antes de usar el monitor.
 
 ## API utilizada por Python
 

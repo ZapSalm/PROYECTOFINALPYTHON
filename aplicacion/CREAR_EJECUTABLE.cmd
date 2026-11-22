@@ -10,7 +10,7 @@ if errorlevel 1 (
 )
 py -3 -c "import tkinter,sys; assert sys.version_info >= (3,10)"
 if errorlevel 1 goto :error
-py -3 -m pip install pyinstaller
+py -3 -m pip install -r "%~dp0..\requirements-dev.txt"
 if errorlevel 1 goto :error
 py -3 -m PyInstaller --noconfirm --clean --onefile --windowed --name SmartParkingMonitorV4 monitor_parqueo.py
 if errorlevel 1 goto :error

@@ -2,7 +2,7 @@
 
 ## Comprobaciones de software realizadas
 
-En el entorno de preparación de este paquete se ejecutan `PRUEBAS.py` (**17 tests**) y `PRUEBAS_RED.py` (**9 tests**), total **26**. Estas pruebas validan respuestas simuladas de HTTP, normalización de sensores, ocupación, estado lleno, desconexión UNO, informes, CSV, detección de IP, token y aceptación/rechazo de órdenes. También se verifica sintaxis Python con `py_compile`.
+Las suites `PRUEBAS.py` (**17 casos**) y `PRUEBAS_RED.py` (**9 casos**) validan respuestas HTTP simuladas, normalización de sensores, ocupación, desconexión del UNO, informes, exportación CSV, detección de IP, token y procesamiento de órdenes. El flujo automatizado también comprueba la sintaxis de Python con `py_compile`.
 
 **Alcance limitado:** son pruebas de software y API simulada. No equivalen a compilar firmware UNO/ESP32 con Arduino IDE ni prueban tensiones, cableado o movimiento real. Los ensayos físicos siguen siendo necesarios.
 
@@ -18,29 +18,22 @@ py -3 herramientas/validar_repositorio.py
 
 GitHub Actions ejecuta los tests de Python y el validador de archivos al hacer push/PR.
 
-## Evidencias observadas en la maqueta (usuario, noviembre de 2026)
+## Matriz de comprobación de la maqueta
 
-- El IDE informó `Hash of data verified` y `Hard resetting via RTS pin...` al cargar firmware V4 por USB.
-- Monitor Serie del ESP32: punto de acceso iniciado en **192.168.4.1**, `UNO comunicado: 4 sensores reconocidos`, tres plazas libres, S1 cercano y apertura ordenada.
-- El endpoint `/api/estado` respondió por Wi-Fi, y Smart Parking V4 mostró **ESP32 en línea**, Arduino conectado, tres plazas libres, distancias de los cuatro sensores y pluma informada como abierta.
-- **No se afirma** que el firmware de este pack, ya reorganizado para claves privadas, se haya recompilado o subido. Las pruebas físicas de todas las combinaciones ocupadas, el cambio efectivo de hotspot y OTA completo están por documentar.
-
-## Matriz de pruebas físicas recomendadas antes de exposición
-
-| Caso | Acción | Resultado esperado | Estado |
-|---|---|---|---|
-| Arranque | Encender UNO y ESP32 | LCD inicializa; cuatro sensores visibles | Parcialmente observado |
-| Plaza 1 | Carrito frente a S2 a <12 cm | LED rojo P1; verde P1 apagado; Python ocupada | Pendiente repetir en maqueta final |
-| Plaza 2 | Carrito frente a S3 a <12 cm | LED rojo P2; Python ocupada | Pendiente |
-| Plaza 3 | Carrito frente a S4 a <12 cm | LED rojo P3; Python ocupada | Pendiente |
-| Liberación | Retirar carrito y dejar referencia ≥15 cm | Verde vuelve tras dos lecturas | Pendiente |
-| Entrada | Acercar objeto a S1 ≤15 cm con plazas libres | Solicitud apertura, estado abierta | Observado a nivel lógico |
-| Lleno | Ocupar las 3 plazas | 0 libres, mensaje lleno, nueva entrada bloqueada | Pendiente |
-| Sensor perdido | Retirar eco de S3 | P2 desconocida y ambos LED P2 apagados | Pendiente |
-| UNO apagado | Interrumpir comunicación | API indica UNO desconectado y plaza desconocida | Pendiente |
-| Hotspot nuevo | Cambiar red desde Python | `sta_conectado=true`, `ip_sta` asignada | Pendiente |
-| Orden `ping` | Enviar token + id | Acuse con el mismo id y `ejecutado=true` | Pendiente en hardware |
-| OTA | Subir firmware por Wi-Fi | Arduino IDE verifica y reinicia | Pendiente en V4 |
+| Caso | Acción | Resultado esperado |
+|---|---|---|
+| Arranque | Encender UNO y ESP32 | Se inicializa la LCD y el monitor muestra cuatro sensores. |
+| Plaza 1 | Colocar un carrito a ≤12 cm de S2 | Se enciende el LED rojo de la plaza 1 y el monitor la muestra ocupada. |
+| Plaza 2 | Colocar un carrito a ≤12 cm de S3 | Se enciende el LED rojo de la plaza 2 y el monitor la muestra ocupada. |
+| Plaza 3 | Colocar un carrito a ≤12 cm de S4 | Se enciende el LED rojo de la plaza 3 y el monitor la muestra ocupada. |
+| Liberación | Retirar el carrito y dejar una referencia a ≥15 cm | El LED verde vuelve tras dos lecturas. |
+| Entrada | Acercar un objeto a ≤15 cm de S1 con cupo | El firmware ordena abrir la pluma. |
+| Parqueo lleno | Ocupar las tres plazas | El monitor muestra cero plazas libres y se bloquea una nueva entrada. |
+| Eco ausente | Interrumpir el eco de S3 | El estado de la plaza 2 pasa a desconocido y se apagan ambos LED. |
+| UNO apagado | Interrumpir la comunicación | La API indica UNO desconectado y las plazas pasan a desconocidas. |
+| Cambio de red | Configurar otro hotspot desde Python | La API devuelve `sta_conectado=true` y una IP STA asignada. |
+| Orden `ping` | Enviar un token válido y un identificador | El acuse devuelve el mismo identificador y `ejecutado=true`. |
+| OTA | Cargar el firmware por Wi-Fi | Arduino IDE verifica la carga y el ESP32 reinicia. |
 
 ## Guía rápida de fallos
 
