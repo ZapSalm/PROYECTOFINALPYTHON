@@ -8,10 +8,10 @@ Prototipo de estacionamiento automático de tres plazas. Un Arduino UNO lee cuat
 
 | Nombre | Carnet |
 |---|---|
-| Angel Gabriel Salmeron Funes | Pendiente |
-| Brenda Janeth Villalta Torres | Pendiente |
-| Jimena Damaris Cañas | Pendiente |
-| Heidy Carolina Galeano Vásquez | Pendiente |
+| Angel Gabriel Salmeron Funes | SMSS040421 |
+| Brenda Janeth Villalta Torres | SMSS062425 |
+| Jimena Damari Cañas Guevara | SMSS155224 |
+| Heidy Carolina Galeano Vásquez | SMSS147324 |
 
 ## Segundo avance
 
