@@ -27,7 +27,8 @@ GitHub Actions ejecuta los tests de Python y el validador de archivos al hacer p
 | Plaza 2 | Colocar un carrito a ≤12 cm de S3 | Se enciende el LED rojo de la plaza 2 y el monitor la muestra ocupada. |
 | Plaza 3 | Colocar un carrito a ≤12 cm de S4 | Se enciende el LED rojo de la plaza 3 y el monitor la muestra ocupada. |
 | Liberación | Retirar el carrito y dejar una referencia a ≥15 cm | El LED verde vuelve tras dos lecturas. |
-| Entrada | Acercar un objeto a ≤15 cm de S1 con cupo | El firmware ordena abrir la pluma. |
+| Entrada | Acercar un objeto a 5 cm o menos de S1 con cupo | El firmware ordena abrir la pluma tras dos lecturas. |
+| Cierre | Retirar el objeto hasta obtener dos lecturas de 7 cm o más | El cierre automático ocurre tras 3 segundos de despeje continuo. |
 | Parqueo lleno | Ocupar las tres plazas | El monitor muestra cero plazas libres y se bloquea una nueva entrada. |
 | Eco ausente | Interrumpir el eco de S3 | El estado de la plaza 2 pasa a desconocido y se apagan ambos LED. |
 | UNO apagado | Interrumpir la comunicación | La API indica UNO desconectado y las plazas pasan a desconocidas. |

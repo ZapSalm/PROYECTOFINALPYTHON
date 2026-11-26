@@ -29,7 +29,7 @@ class TestMonitor(unittest.TestCase):
             raw, logs, error=consultar_esp32(f'127.0.0.1:{server.server_port}')
             data=normalizar(raw)
             self.assertEqual(data['ocup'],[False,True,False]); self.assertEqual(data['libres'],2)
-            self.assertEqual(data['dist'][0],8.5); self.assertTrue(data['entrada']); self.assertEqual(data['pluma'],'abierta')
+            self.assertEqual(data['dist'][0],4.5); self.assertTrue(data['entrada']); self.assertEqual(data['pluma'],'abierta')
             self.assertIn('DEMO',logs); self.assertIsNone(error)
         finally: server.shutdown(); server.server_close(); t.join()
     def test_full(self):
@@ -60,7 +60,7 @@ class TestMonitor(unittest.TestCase):
             path=Path(td)/'datos.csv'; export_history(path,[row,gap])
             with path.open(encoding='utf-8-sig',newline='') as f: data=list(csv.reader(f))
         self.assertEqual(tuple(data[0]),HISTORY_COLUMNS)
-        self.assertEqual(data[1][2],'8.5'); self.assertEqual(data[2][2],''); self.assertEqual(data[2][-1],'SIN CONEXIÓN')
+        self.assertEqual(data[1][2],'4.5'); self.assertEqual(data[2][2],''); self.assertEqual(data[2][-1],'SIN CONEXIÓN')
     def test_uptime(self): self.assertEqual(format_uptime(90061),'1d 01:01:01')
 
 

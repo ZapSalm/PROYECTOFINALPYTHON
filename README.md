@@ -1,126 +1,91 @@
-# Smart Parking V4
+<img src="diagramas/logo_smart_parking.svg" alt="Logo de Smart Parking" width="112">
 
-Prototipo de parqueo automático de tres plazas con Arduino UNO, ESP32 y un monitor de escritorio en Python. Cuatro sensores HC-SR04 miden la entrada y las plazas. La LCD y seis LED muestran disponibilidad, el ESP32 controla la pluma con un servomotor SG90 y el monitor recibe la telemetría por Wi-Fi.
+# Smart Parking V5
 
-![Panel Smart Parking V4, modo demostración](capturas/Vista_V4_Principal.png)
+Prototipo de estacionamiento automático de tres plazas. Un Arduino UNO lee cuatro sensores ultrasónicos y actualiza la LCD. El ESP32 controla la pluma y los LED. Una aplicación de escritorio en Python muestra por Wi-Fi la ocupación, las distancias y el registro de eventos.
 
-## Qué permite hacer
+## Integrantes
 
-- Detectar un vehículo en la entrada (**S1**) y determinar ocupación de **Plaza 1–3** con **S2–S4**.
-- Encender **verde** cuando una plaza está libre y **rojo** cuando está ocupada. Ambos apagados cuando la lectura es inválida.
-- Mostrar capacidad, ocupación y plazas libres en una **LCD I2C de 16×2**.
-- Abrir la pluma si existe cupo, los datos son válidos y se detecta vehículo en la entrada; cerrar después de despejar la entrada y cumplir un retardo.
-- Visualizar telemetría, historial, diagnósticos y logs desde la aplicación Windows (**Tkinter**, sin paquetes adicionales en tiempo de ejecución).
-- Configurar desde la app un **Wi-Fi de 2.4 GHz**, usando el punto de acceso del propio ESP32 (`SmartParking-Setup`, IP `192.168.4.1`).
-- Enviar órdenes autenticadas `ping`, prueba de LED y solicitudes de apertura/cierre con confirmación **lógica**, no física.
-- Actualizar el firmware del ESP32 mediante **ArduinoOTA** desde Arduino IDE cuando el equipo está accesible por la red.
+| Nombre | Carnet |
+|---|---|
+| Angel Gabriel Salmeron Funes | Pendiente |
+| Brenda Janeth Villalta Torres | Pendiente |
+| Jimena Damaris Cañas | Pendiente |
+| Heidy Carolina Galeano Vásquez | Pendiente |
 
-## Arquitectura
+## Segundo avance
 
-```mermaid
-flowchart LR
-  subgraph UNO[Arduino UNO R3, 5 V]
-    S1[HC-SR04 S1 entrada] --> U[Lectura + validación + LCD]
-    S2[HC-SR04 S2 plaza 1] --> U
-    S3[HC-SR04 S3 plaza 2] --> U
-    S4[HC-SR04 S4 plaza 3] --> U
-    U --> LCD[LCD I2C 16x2]
-  end
-  U -- "D12 abierto / 1200 baudios / GND común" --> E[ESP32 GPIO16]
-  E --> L[6 LED: 3 verdes y 3 rojos]
-  E --> M[SG90 GPIO18 + fuente 5 V externa]
-  E <-- "HTTP API, Wi-Fi 2.4 GHz" --> P[App Windows Python/Tkinter]
-  E --> A[AP de configuración 192.168.4.1]
-```
+- El sensor de entrada confirma la presencia de un vehículo tras dos lecturas consecutivas a **5 cm o menos**.
+- La pluma se abre cuando el UNO está conectado, las tres plazas tienen datos válidos y al menos una está libre.
+- El cierre automático requiere dos lecturas a **7 cm o más** y **3 segundos** con la entrada despejada. El temporizador se reinicia si se pierde la confirmación de despeje.
+- El panel muestra el estado de los sensores, la pluma, los LED esperados y la comunicación con el UNO. También ofrece historial, diagnóstico y exportaciones.
+- El ESP32 permite configurar el Wi-Fi de 2,4 GHz desde su punto de acceso. El monitor puede enviar instrucciones autenticadas y el firmware admite actualizaciones OTA desde Arduino IDE.
 
-### Imágenes y planos
+[Informe PDF del segundo avance](documentacion/Segundo_Avance_Smart_Parking_V5.pdf) · [Capturas de la V5](capturas/) · [Diagrama general](diagramas/01_Diagrama_General.png)
 
-- [Diagrama eléctrico general](diagramas/01_Diagrama_General.png) · [SVG editable](diagramas/01_Diagrama_General.svg)
-- [Conexión de los seis LED y resistencias](diagramas/02_Detalle_LEDs.png) · [SVG editable](diagramas/02_Detalle_LEDs.svg)
-- [Distribución sugerida de la maqueta](diagramas/03_Plano_Maqueta.png) · [SVG editable](diagramas/03_Plano_Maqueta.svg)
+![Panel de Smart Parking V5 en modo demostración con cupo y acceso autorizado](capturas/V5_Acceso_autorizado.png)
 
-## Materiales principales
+## Versiones y dependencias
 
-| Cantidad | Componente | Uso |
-|---:|---|---|
-| 1 | Arduino UNO R3 | Sensores y LCD |
-| 1 | ESP32-WROOM-32 DevKit | Control, LED, Wi-Fi y API |
-| 4 | HC-SR04 | Entrada y 3 plazas |
-| 1 | LCD 16×2 con PCF8574 I2C | Contador local |
-| 1 | Microservo SG90 | Barrera |
-| 3 + 3 | LED verdes y rojos | Disponibilidad |
-| 6 | Resistencias **330 Ω**, ¼ W | Limitación de corriente de cada LED |
-| 1 | Resistencia **4.7 kΩ** | Pull-up a **3V3** de ESP32 GPIO16 |
-| 1 | Fuente **5 V regulada**, recomendable ≥2 A | Alimentación independiente del servo |
-| Varias | Protoboard, Dupont, cables, maqueta | Montaje |
-
-**Resumen de conexiones:** S1 D4/D5; S2 D6/D7; S3 D8/D9; S4 D10/D11 en el UNO. LCD SDA A4, SCL A5. UNO D12 → ESP32 GPIO16; GPIO16 con pull-up de 4.7 kΩ a **3V3**. Servo señal en GPIO18. LED verdes GPIO25/27/33; rojos GPIO26/32/23, con una resistencia de 330 Ω **por LED** y cátodos a GND. **Todas las tierras conectadas.** Consulta el plano y [guía completa de cableado](documentacion/02_HARDWARE_Y_CABLEADO.md).
-
-## Instalación rápida
-
-### 1. Arduino UNO
-
-1. Instala [Arduino IDE](https://www.arduino.cc/en/software) y la biblioteca **hd44780** de Bill Perry (Library Manager).
-2. Abre `firmware/arduino_uno/Parqueo_UNO_4_Sensores/Parqueo_UNO_4_Sensores.ino`.
-3. Selecciona **Arduino Uno** y su puerto USB. Carga. Monitor serie a **9600**.
-4. Comprueba tramas `S1:...,S2:...,S3:...,S4:...` (valores en **milímetros**; `-1` significa sin lectura).
-
-### 2. ESP32
-
-1. Instala el paquete de placas **esp32 by Espressif Systems** y la biblioteca **ESP32Servo** (el sketch también usa `WiFi`, `WebServer`, `Preferences` y `ArduinoOTA` del core ESP32).
-2. En `firmware/esp32/Parqueo_ESP32_WiFi_Config/`, **copia** `config_private.example.h` como `config_private.h` y reemplaza las tres claves de ejemplo. `config_private.h` está excluido de Git.
-3. Abre el `.ino` ESP32 de esa carpeta y selecciona **ESP32 Dev Module** y el puerto USB correspondiente. Instálalo. Monitor serie a **115200**.
-4. Verifica la red **SmartParking-Setup** y prueba, conectado a ella, [http://192.168.4.1/api/estado](http://192.168.4.1/api/estado).
-
-Configura `SP_AP_PASSWORD` con entre 8 y 63 caracteres ASCII. Antes de conectar el monitor, verifica que `SmartParking-Setup` aparezca como red protegida. Conecta el GPIO16 del ESP32 según la [guía de cableado](documentacion/02_HARDWARE_Y_CABLEADO.md).
-
-### 3. Monitor Windows
-
-- **Ejecutable para Windows:** abre `SmartParkingMonitorV4.exe` desde la raíz.
-- **Código fuente:** instala Python 3.10 o superior con Tcl/Tk. Desde `aplicacion/`, abre `ABRIR_MONITOR.cmd` o ejecuta `py -3 monitor_parqueo.py`.
-- **Modo demostración:** abre `ABRIR_DEMO.cmd` o ejecuta `py -3 monitor_parqueo.py --demo` desde `aplicacion/`.
-- **Conexión al ESP32:** conecta la PC a `SmartParking-Setup`, selecciona `192.168.4.1` y usa **Configurar red Wi-Fi** para configurar el hotspot. Luego conecta la PC a esa misma red y usa la IP asignada al ESP32.
-
-## Librerías de Python
-
-El monitor usa la biblioteca estándar de Python. Para ejecutarlo desde el código fuente se requiere una instalación con **Tkinter y Tcl/Tk**. Las pruebas también usan módulos estándar. **PyInstaller 6.x** es la única dependencia externa directa y se instala al generar el ejecutable.
-
-| Área | Módulos principales | Para qué se usan |
+| Entorno | Versión de referencia | Uso |
 |---|---|---|
-| Interfaz | `tkinter`, `tkinter.ttk` | Mostrar el panel, los formularios y las gráficas. |
-| Comunicación | `urllib`, `json`, `socket`, `ipaddress` | Consultar el ESP32, validar sus respuestas y descubrirlo en la red local. |
-| Concurrencia | `threading`, `queue`, `concurrent.futures` | Procesar las consultas en segundo plano y actualizar la interfaz. |
-| Historial y ajustes | `collections`, `csv`, `datetime`, `pathlib` | Guardar muestras en memoria, exportarlas y recuperar la última dirección del ESP32. |
-| Pruebas y ejecutable | `unittest`, `http.server`, `PyInstaller` | Probar el monitor con una API simulada y empaquetar la aplicación para Windows. |
+| Python | 3.10 o superior, pruebas locales con 3.12.14 | Ejecutar el monitor y las pruebas. |
+| Tcl/Tk y módulo `tkinter` | Tcl/Tk 8.6, incluido en la instalación gráfica de Python | Panel, formularios y gráficas. |
+| `urllib`, `json`, `socket` e `ipaddress` | Biblioteca estándar de la versión de Python instalada | Consultas HTTP al ESP32, lectura de respuestas y búsqueda en la red local. |
+| `threading`, `queue` y `concurrent.futures` | Biblioteca estándar de Python | Consultas en segundo plano y entrega de datos a la interfaz. |
+| `collections`, `csv`, `datetime` y `pathlib` | Biblioteca estándar de Python | Historial, exportaciones y configuración local. |
+| `unittest` y `http.server` | Biblioteca estándar de Python | Pruebas del monitor contra una API simulada. |
+| PyInstaller | 6.16.0 | Dependencia opcional para generar el ejecutable en Windows. |
+| Arduino AVR Boards | 1.8.8 | Compilar el firmware del Arduino UNO. Incluye `Wire` para I2C. |
+| hd44780, de Bill Perry | 1.3.2 | Manejar la pantalla LCD I2C de 16×2. |
+| esp32 by Espressif Systems | 3.3.12 | Compilar el firmware del ESP32. Incluye `WiFi`, `WebServer`, `Preferences` y `ArduinoOTA`. |
+| ESP32Servo | 3.2.1 | Controlar la posición del servomotor SG90. |
 
-La [documentación de Python](documentacion/04_APLICACION_PYTHON.md) detalla **cada módulo importado**, su propósito, los comandos para ejecutar las pruebas y cómo generar el ejecutable.
+[requirements.txt](requirements.txt) registra que el monitor solo usa módulos estándar. [requirements-dev.txt](requirements-dev.txt) fija la versión de PyInstaller. La [guía de Python](documentacion/04_APLICACION_PYTHON.md) explica cada módulo.
 
-Guías de [firmware](documentacion/03_FIRMWARE.md) y [red, API y OTA](documentacion/05_RED_WIFI_API_OTA.md).
+## Instalación
 
-## Carpetas
+### 1. Clonar el repositorio y abrir el monitor
 
-```text
-Smart Parking V4/
-├── README.md, LEEME.txt, SmartParkingMonitorV4.exe, .gitignore
-├── firmware/
-│   ├── arduino_uno/Parqueo_UNO_4_Sensores/*.ino
-│   └── esp32/Parqueo_ESP32_WiFi_Config/
-│       ├── Parqueo_ESP32_WiFi_Config.ino
-│       └── config_private.example.h
-├── aplicacion/
-│   ├── monitor_parqueo.py
-│   ├── PRUEBAS.py, PRUEBAS_RED.py
-│   └── *.cmd
-├── diagramas/                  # PNG + SVG
-├── capturas/                   # Pantallas de modo demostración
-├── documentacion/              # Guías y ejemplo de API
-├── herramientas/               # Verificaciones de pinout/secretos
-└── .github/workflows/          # Pruebas de Python en CI
+Desde PowerShell, con Git y una instalación de Python que incluya Tcl/Tk:
+
+```powershell
+git clone https://github.com/ZapSalm/PROYECTOFINALPYTHON.git
+cd PROYECTOFINALPYTHON
+py -3 -m pip install -r requirements.txt
+py -3 aplicacion/monitor_parqueo.py --demo
 ```
 
-## Pruebas
+La demostración muestra datos simulados. Para monitorear la maqueta, ejecuta `py -3 aplicacion/monitor_parqueo.py` y usa la IP del ESP32. Si prefieres generar un ejecutable V5, ejecuta `aplicacion/CREAR_EJECUTABLE.cmd` en Windows.
 
-Desde la raíz del proyecto en PowerShell:
+### 2. Cargar el Arduino UNO
+
+1. Instala [Arduino IDE](https://www.arduino.cc/en/software). En el gestor de placas selecciona **Arduino AVR Boards 1.8.8** y en el gestor de bibliotecas instala **hd44780 1.3.2**.
+2. Abre [el sketch del UNO](firmware/arduino_uno/Parqueo_UNO_4_Sensores/Parqueo_UNO_4_Sensores.ino). Elige **Arduino Uno**, selecciona su puerto USB y carga el código.
+3. Abre el monitor serie a **9600 baudios**. Una trama correcta tiene el formato `S1:...,S2:...,S3:...,S4:...` en milímetros. Un `-1` indica una lectura inválida.
+
+### 3. Cargar el ESP32
+
+1. En el gestor de placas instala **esp32 by Espressif Systems 3.3.12**. En el gestor de bibliotecas instala **ESP32Servo 3.2.1**.
+2. En [la carpeta del ESP32](firmware/esp32/Parqueo_ESP32_WiFi_Config/), copia `config_private.example.h` como `config_private.h` y asigna claves propias a `SP_AP_PASSWORD`, `SP_CONTROL_TOKEN` y `SP_OTA_PASSWORD`. Usa entre 8 y 63 caracteres ASCII para la clave del punto de acceso. Conserva este archivo exclusivamente en tu equipo.
+3. Abre `Parqueo_ESP32_WiFi_Config.ino`, selecciona **ESP32 Dev Module** y el puerto USB y carga el código. Usa **115200 baudios** para el monitor serie.
+4. Conecta la computadora a **SmartParking-Setup** y abre [el estado del dispositivo](http://192.168.4.1/api/estado). En el monitor usa `192.168.4.1` y pulsa **Conectar**. Para usar otra red de 2,4 GHz, pulsa **Configurar red Wi-Fi**. Conecta ambos equipos a esa red y usa en la app la IP asignada al ESP32.
+
+### 4. Montar la maqueta
+
+Consulta la [guía de cableado](documentacion/02_HARDWARE_Y_CABLEADO.md), el [diagrama eléctrico](diagramas/01_Diagrama_General.png), el [detalle de los LED](diagramas/02_Detalle_LEDs.png) y el [plano de distribución](diagramas/03_Plano_Maqueta.png).
+
+| Elemento | Conexión principal |
+|---|---|
+| Sensores S1–S4 | Arduino UNO. TRIG/ECHO D4/D5, D6/D7, D8/D9 y D10/D11. |
+| Pantalla LCD | SDA A4 y SCL A5 del Arduino UNO. |
+| Comunicación entre placas | UNO D12 en salida abierta a ESP32 GPIO16, a 1200 baudios y con tierra común. Consulta el acondicionamiento de señal en la guía de cableado. |
+| Servomotor SG90 | Señal ESP32 GPIO18, fuente de 5 V regulada independiente y tierra común. |
+| LED por plaza | Verdes GPIO25, GPIO27 y GPIO33. Rojos GPIO26, GPIO32 y GPIO23. |
+
+El sistema conserva las muestras del monitor en memoria durante cada sesión y permite guardarlas en CSV. La configuración local del monitor se guarda en JSON. El proyecto funciona sin un motor de base de datos.
+
+## Pruebas y documentación
 
 ```powershell
 py -3 aplicacion/PRUEBAS.py
@@ -128,8 +93,8 @@ py -3 aplicacion/PRUEBAS_RED.py
 py -3 herramientas/validar_repositorio.py
 ```
 
-Las **26 pruebas automatizadas** cubren el monitor (17) y la comunicación con una API simulada (9). El validador comprueba el pinout, las interfaces compartidas y la exclusión del archivo privado. La [matriz de pruebas](documentacion/06_PRUEBAS_Y_DIAGNOSTICO.md) incluye las comprobaciones de la maqueta.
+Las pruebas de Python verifican el monitor y la comunicación HTTP simulada. El validador verifica pines, umbrales, rutas de la API y configuración privada. Para comprobar el movimiento físico del servo y las lecturas en la maqueta, sigue la [matriz de pruebas](documentacion/06_PRUEBAS_Y_DIAGNOSTICO.md).
 
-## Límites importantes
-
-Usa el sistema como maqueta supervisada. El monitor muestra el estado lógico de los LED y la posición ordenada al servo. Opera la API HTTP en una red Wi-Fi local protegida y guarda las credenciales en `config_private.h`. Consulta [seguridad y limitaciones](documentacion/07_SEGURIDAD_Y_LIMITACIONES.md).
+- [Arquitectura](documentacion/01_ARQUITECTURA.md) y [firmware](documentacion/03_FIRMWARE.md).
+- [Red, API y OTA](documentacion/05_RED_WIFI_API_OTA.md).
+- [Seguridad y limitaciones](documentacion/07_SEGURIDAD_Y_LIMITACIONES.md).

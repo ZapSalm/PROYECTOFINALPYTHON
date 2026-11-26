@@ -1,11 +1,11 @@
-SMART PARKING V4
+SMART PARKING V5
 
 1. Lee README.md para conocer el diseño, la instalación y el uso del monitor.
 2. Consulta diagramas/ y documentacion/02_HARDWARE_Y_CABLEADO.md para montar la maqueta.
 3. Abre los sketches de Arduino UNO y ESP32 desde sus carpetas en firmware/.
 4. Para compilar el ESP32, crea config_private.h desde config_private.example.h
    y configura las tres claves en ese archivo local.
-5. Abre SmartParkingMonitorV4.exe en Windows. Para probar la interfaz con datos
+5. Abre aplicacion/ABRIR_MONITOR.cmd en Windows. Para probar la interfaz con datos
    simulados, ejecuta aplicacion/ABRIR_DEMO.cmd con Python y Tcl/Tk instalados.
 6. Consulta documentacion/04_APLICACION_PYTHON.md para ver los módulos, las
    dependencias y los pasos para generar el ejecutable.

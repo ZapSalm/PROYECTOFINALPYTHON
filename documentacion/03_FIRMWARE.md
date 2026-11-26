@@ -20,7 +20,8 @@
 - Distancia calculada inicialmente en milímetros; `-1` = eco ausente o fuera de rango 20–4000 mm.
 - Las plazas pasan a **ocupado** a ≤120 mm (12 cm) y **libre** a ≥150 mm (15 cm).
 - Una nueva clasificación requiere dos lecturas consecutivas; entre 120 y 150 mm se conserva la anterior (histéresis).
-- Entrada detectada a ≤150 mm; entrada despejada a ≥180 mm.
+- La entrada se detecta tras dos lecturas consecutivas a 50 mm o menos (5 cm).
+- La entrada se confirma despejada tras dos lecturas consecutivas a 70 mm o más (7 cm).
 - Apertura exige UNO comunicado, cuatro lecturas suficientes, entrada detectada y al menos un lugar libre.
 - Tras despejar entrada, espera ~3000 ms antes de ordenar cierre. Si la entrada deja de ser fiable o falla comunicación, evita cerrar desde ese estado.
 - Si no llegan tramas válidas durante más de **3500 ms**, los estados de sensores y plazas se invalidan y los LED se apagan.

@@ -1,5 +1,12 @@
 # Registro de cambios
 
+## V5 — segundo avance
+
+- Ajuste de la detección de entrada a 5 cm con dos lecturas consecutivas.
+- Confirmación de despeje a 7 cm con dos lecturas antes de contar el retardo de cierre de 3 segundos.
+- Monitor de demostración actualizado al alcance de la maqueta.
+- Informe del segundo avance, capturas, logo y versiones de dependencias en la documentación.
+
 ## V4
 
 - Monitor Python con tres plazas, cuatro sensores, diagnósticos, eventos, gráficas y exportaciones.

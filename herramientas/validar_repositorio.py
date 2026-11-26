@@ -16,6 +16,8 @@ assert re.search(r'GPIO_RX_UNO\s*=\s*16', ESP)
 assert re.search(r'GPIO_SERVO\s*=\s*18', ESP)
 assert re.search(r'GPIO_LED_VERDE\[3\]\s*=\s*\{25,\s*27,\s*33\}', ESP)
 assert re.search(r'GPIO_LED_ROJO\[3\]\s*=\s*\{26,\s*32,\s*23\}', ESP)
+assert re.search(r'UMBRAL_ENTRA_MM\s*=\s*50\b', ESP)
+assert re.search(r'UMBRAL_SALE_MM\s*=\s*70\b', ESP)
 assert 'S1:%ld,S2:%ld,S3:%ld,S4:%ld' in UNO and 'S1:%ld,S2:%ld,S3:%ld,S4:%ld%c' in ESP
 for endpoint in ('/api/estado','/api/logs','/api/wifi/status','/api/wifi/scan','/api/wifi/config','/api/comando'):
     assert endpoint in ESP and endpoint in PY, endpoint

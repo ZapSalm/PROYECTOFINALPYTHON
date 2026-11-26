@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title">
+  <title id="title">Smart Parking</title>
+  <rect x="4" y="4" width="152" height="152" rx="33" fill="#12283F"/>
+  <path d="M53 114V44h30a23 23 0 0 1 0 46H67v24zM67 58v18h16a9 9 0 0 0 0-18z" fill="#fff" fill-rule="evenodd"/>
+  <path d="M38 122h84" stroke="#8EE0D2" stroke-width="5" stroke-linecap="round"/>
+  <path d="M96 112h25m-25 0v10" stroke="#52C5AD" stroke-width="6" stroke-linecap="round"/>
+  <path d="M103 109l-5 6m15-6-5 6" stroke="#fff" stroke-width="3"/>
+</svg>

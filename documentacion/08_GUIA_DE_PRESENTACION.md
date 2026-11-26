@@ -3,7 +3,7 @@
 ## Antes de llegar
 
 - Llevar UNO, ESP32, cableado, fuente estable del servo, protoboard, laptop con EXE y cargadores.
-- Instalar el firmware V4 y comprobar Wi-Fi con anticipación.
+- Instalar el firmware V5 y comprobar Wi-Fi con anticipación.
 - Probar hotspot de 2.4 GHz; desactivar aislamiento entre clientes si el teléfono/router lo permite.
 - Tener copia de ZIP, IDE, código fuente y el ejecutable ya creado en Windows.
 - No exhibir las contraseñas ni el token en pantalla.

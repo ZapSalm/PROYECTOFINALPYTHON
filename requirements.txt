@@ -1,3 +1,3 @@
-# Ejecución y pruebas: Python 3.10 o superior con Tcl/Tk.
-# Paquetes de pip requeridos: ninguno.
-# Consulta documentacion/04_APLICACION_PYTHON.md para los módulos utilizados.
+# El monitor y sus pruebas requieren Python 3.10 o superior con Tcl/Tk.
+# Todos los módulos de ejecución forman parte de Python. No se instalan con pip.
+# Para generar el ejecutable de Windows, usa requirements-dev.txt.

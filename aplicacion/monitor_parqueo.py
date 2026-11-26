@@ -1,4 +1,4 @@
-"""Smart Parking Monitor v4.0 PRESENTACIÓN — configuración Wi-Fi y órdenes, Python 3.10+.
+"""Smart Parking Monitor V5, configuración Wi-Fi y órdenes, Python 3.10+.
 Ejecutar: py -3 monitor_parqueo.py | Demostración: --demo
 """
 import argparse
@@ -368,9 +368,10 @@ def demo_state(t):
     phase = int(t / 5) % 5
     occup = [[False, False, False], [False, True, False], [True, True, False], [True, True, True], [False, True, False]][phase]
     entry = phase in (1, 2, 3)
-    distances = [8.5 if entry else 30.1] + [8.2 + i if v else 29.4 + i for i, v in enumerate(occup)]
+    distances = [4.5 if entry else 14.0] + [8.2 + i if v else 29.4 + i for i, v in enumerate(occup)]
     d = {'equipo': 'parqueo-esp32', 'conectado': True, 'ip': '192.168.1.18',
-         'arduino_conectado': True, 'senal_wifi_dbm': -59, 'tiempo_encendido_s': int(t),
+         'arduino_conectado': True, 'wifi_sta_conectado': True,
+         'senal_wifi_dbm': -59, 'tiempo_encendido_s': int(t),
          'plazas_total': 3, 'plazas_ocupadas': sum(occup), 'plazas_libres': 3-sum(occup),
          'parqueo_lleno': all(occup), 'vehiculo_entrada': entry, 'servo_disponible': True,
          'pluma': 'abierta' if entry and not all(occup) else 'cerrada',
@@ -385,7 +386,7 @@ class MonitorParqueo:
     def __init__(self, root, demo=False, host=IP_INICIAL):
         self.root, self.demo = root, demo
         self.started = time.monotonic()
-        self.root.title('Smart Parking | Presentación v4.0')
+        self.root.title('Smart Parking V5')
         sw, sh = self.root.winfo_screenwidth(), self.root.winfo_screenheight()
         self.root.geometry(f'{min(1180, max(920, sw-90))}x{min(850, max(620, sh-100))}')
         self.root.minsize(830, 550)
@@ -463,7 +464,7 @@ class MonitorParqueo:
         header=tk.Frame(outer,bg=BG); header.pack(fill='x')
         self.label(header,'SMART PARKING',24,TEXT,True).pack(side='left')
         self.connection=self.label(header,'●  SIN CONEXIÓN',11,AMBER,True); self.connection.pack(side='right')
-        self.label(outer,'ESP32 + Arduino UNO  /  Tres plazas  /  Presentación V4 con configuración Wi-Fi',10,MUTED).pack(anchor='w',pady=(0,10))
+        self.label(outer,'ESP32 + Arduino UNO  /  Tres plazas  /  Monitor V5 con configuración Wi-Fi',10,MUTED).pack(anchor='w',pady=(0,10))
         ctrl=self.panel(outer,px=12,py=8); ctrl.pack(fill='x')
         self.label(ctrl,'Dirección ESP32',10,MUTED).pack(side='left')
         ent=tk.Entry(ctrl,textvariable=self.ip,width=22,font=('Consolas',11),bg=PANEL2,fg=TEXT,insertbackground=TEXT,relief='flat')
@@ -601,7 +602,7 @@ class MonitorParqueo:
 
     def _show_wifi(self):
         if self.demo:
-            messagebox.showinfo('Modo demo','Configurar red requiere un ESP32 real con firmware V4.')
+            messagebox.showinfo('Modo demo','Configurar red requiere un ESP32 con el firmware del proyecto.')
             return
         w=tk.Toplevel(self.root); w.title('Smart Parking | Configurar Wi-Fi del ESP32')
         w.geometry('720x570'); w.minsize(660,520); w.configure(bg=BG)
@@ -828,7 +829,7 @@ class MonitorParqueo:
         if s['wifi'] is False:
             self._unknown('●  SIN WI-FI',RED,'El equipo informa que no está conectado.'); return
         self.connection.config(text='●  DEMOSTRACIÓN' if self.demo else '●  ESP32 EN LÍNEA',fg=AMBER if self.demo else GREEN)
-        # El firmware V4 informa la conexión STA al hotspot, no solo acceso AP.
+        # El firmware informa la conexión STA al hotspot y el estado del AP.
         sta = raw.get('wifi_sta_conectado')
         if sta is True:
             self.netstatus.config(text='Hotspot: conectado',fg=GREEN)

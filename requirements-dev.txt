@@ -1,2 +1,2 @@
-# Dependencia externa para generar SmartParkingMonitorV4.exe en Windows.
-pyinstaller>=6,<7
+# Dependencia externa para generar SmartParkingMonitorV5.exe en Windows.
+pyinstaller==6.16.0

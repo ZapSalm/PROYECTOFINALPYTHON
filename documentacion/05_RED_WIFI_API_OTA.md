@@ -54,7 +54,7 @@ Ejemplo de respuesta saneada en [api_estado_ejemplo.json](api_estado_ejemplo.jso
 
 ## OTA
 
-El firmware inicial de V4 debe estar instalado. Con PC y ESP32 en la misma red, Arduino IDE puede detectar el puerto de red `parqueo-esp32`; se usa la **clave OTA del firmware instalado**. La aplicación Python V4 **no compila ni sube** código C++/`.ino`. No hacer OTA mientras se demuestra movimiento de la barrera.
+Una vez instalado el firmware del proyecto, conecta la PC y el ESP32 a la misma red. Arduino IDE puede detectar el puerto `parqueo-esp32`; usa la **clave OTA del firmware instalado** para cargar el sketch. Mantén la barrera en reposo durante la actualización.
 
 ## Seguridad
 

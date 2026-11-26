@@ -35,8 +35,8 @@ const int GPIO_LED_ROJO[3]  = {26, 32, 23};
 
 const long UMBRAL_OCUPA_MM = 120;     // vehiculo <= 12 cm
 const long UMBRAL_LIBERA_MM = 150;    // libre >= 15 cm
-const long UMBRAL_ENTRA_MM = 150;     // entrada detecta <= 15 cm
-const long UMBRAL_SALE_MM = 180;      // entrada se libera >= 18 cm
+const long UMBRAL_ENTRA_MM = 50;      // entrada detecta <= 5 cm
+const long UMBRAL_SALE_MM = 70;       // entrada se libera >= 7 cm
 const int SERVO_CERRADO_US = 1100;
 const int SERVO_ABIERTO_US = 1900;
 const unsigned long CIERRE_TRAS_LIBRE_MS = 3000UL;
@@ -149,6 +149,10 @@ void actualizarEntrada(long distancia) {
   }
 }
 
+bool entradaDespejada() {
+  return arduinoConectado && entradaValida && cuentaSalida >= 2;
+}
+
 // Devuelve false si alguna plaza no se puede determinar.
 bool obtenerConteo(int& ocupadas, int& libres) {
   ocupadas = 0;
@@ -181,8 +185,8 @@ void cerrarPluma() {
 void controlarPluma() {
   if (!servoDisponible) return;
   if (plumaAbierta) {
-    // No mover la barrera hacia abajo con S1 perdido o carro detectado.
-    if (!arduinoConectado || !entradaValida || vehiculoEntrada) {
+    // El retardo de cierre empieza cuando S1 confirma el despeje.
+    if (!entradaDespejada()) {
       entradaLibreDesde = 0;
       return;
     }
@@ -407,8 +411,8 @@ void ordenRemota() {
     } else detalle = "Apertura bloqueada: revisar sensores, servo y plazas disponibles";
   } else if (accion == "cerrar") {
     // Solo maqueta; nunca cerrar con posible obstaculo o sin sensor confiable.
-    if (servoDisponible && arduinoConectado && entradaValida &&
-        !vehiculoEntrada && (millis() - ultimoVehiculoEntrada >= 1500UL)) {
+    if (servoDisponible && entradaDespejada() &&
+        (millis() - ultimoVehiculoEntrada >= 1500UL)) {
       if (plumaAbierta) cerrarPluma();
       ejecutado = true;
       detalle = "Pluma en estado CERRADO ordenado; NO confirmacion fisica";

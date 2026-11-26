@@ -4,10 +4,10 @@
 
 | Uso | Requisitos |
 |---|---|
-| Abrir el ejecutable en Windows | `SmartParkingMonitorV4.exe` incluye el intérprete y los módulos que necesita el monitor. |
+| Abrir el ejecutable en Windows | Genera `SmartParkingMonitorV5.exe` con `aplicacion/CREAR_EJECUTABLE.cmd`. |
 | Ejecutar el código fuente | Python 3.10 o superior con Tcl/Tk. `requirements.txt` contiene cero paquetes de pip. |
 | Ejecutar las pruebas | La misma instalación de Python. El servidor simulado se comunica con el monitor en la propia computadora. |
-| Generar el ejecutable | Python para Windows, Tcl/Tk y PyInstaller 6.x, declarado en `requirements-dev.txt`. |
+| Generar el ejecutable | Python para Windows, Tcl/Tk y PyInstaller 6.16.0, fijado en `requirements-dev.txt`. |
 
 ## Módulos del monitor y motivo de uso
 
@@ -53,7 +53,7 @@ Todos los módulos de esta tabla forman parte de la biblioteca estándar. Las fu
 
 ## Pantallas
 
-![Monitor principal](../capturas/Vista_V4_Principal.png)
+![Monitor de Smart Parking V5 en demostración](../capturas/V5_Acceso_autorizado.png)
 
 ![Configurar Wi-Fi](../capturas/Vista_V4_Configurar_WiFi.png)
 
@@ -85,7 +85,7 @@ py -3 aplicacion/monitor_parqueo.py --host 192.168.4.1
 py -3 aplicacion/monitor_parqueo.py --demo
 ```
 
-En Windows también puedes abrir `SmartParkingMonitorV4.exe`, `aplicacion/ABRIR_MONITOR.cmd` o `aplicacion/ABRIR_DEMO.cmd`. Consulta la [documentación de Tkinter](https://docs.python.org/3/library/tkinter.html) para verificar Tcl/Tk.
+En Windows puedes ejecutar `aplicacion/ABRIR_MONITOR.cmd` o `aplicacion/ABRIR_DEMO.cmd`. Consulta la [documentación de Tkinter](https://docs.python.org/3/library/tkinter.html) para verificar Tcl/Tk.
 
 ## Generar el ejecutable
 
