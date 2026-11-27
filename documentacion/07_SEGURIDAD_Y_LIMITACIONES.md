@@ -29,4 +29,4 @@ Configura `SP_AP_PASSWORD` con entre 8 y 63 caracteres ASCII. En la primera pues
 
 ## Para mejorar una versión posterior
 
-Usar sensor óptico de seguridad bajo pluma, dos sensores de paso/vehículo, fin de carrera para confirmar posición, watchdog, protección de fuente, carcasa, credenciales con acceso limitado, HTTPS o protocolo de enlace autenticado. Esas mejoras **no están implementadas en la V4 documentada**.
+Para una instalación posterior quedan pendientes un sensor óptico de seguridad bajo la pluma, dos sensores de paso de vehículos, un fin de carrera para confirmar posición, watchdog, protección de fuente, carcasa, credenciales con acceso limitado y HTTPS o un protocolo de enlace autenticado.

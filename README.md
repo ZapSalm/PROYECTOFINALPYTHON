@@ -45,6 +45,8 @@ Prototipo de estacionamiento automático de tres plazas. Un Arduino UNO lee cuat
 
 ## Instalación
 
+En Windows puedes abrir [SmartParkingMonitorV5.exe](SmartParkingMonitorV5.exe) desde la raíz del repositorio. Si quieres ejecutar el código fuente o probar el modo demostración, sigue el paso 1.
+
 ### 1. Clonar el repositorio y abrir el monitor
 
 Desde PowerShell, con Git y una instalación de Python que incluya Tcl/Tk:

@@ -4,7 +4,7 @@
 
 | Uso | Requisitos |
 |---|---|
-| Abrir el ejecutable en Windows | Genera `SmartParkingMonitorV5.exe` con `aplicacion/CREAR_EJECUTABLE.cmd`. |
+| Abrir el ejecutable en Windows | Abre `SmartParkingMonitorV5.exe` desde la raíz del proyecto. |
 | Ejecutar el código fuente | Python 3.10 o superior con Tcl/Tk. `requirements.txt` contiene cero paquetes de pip. |
 | Ejecutar las pruebas | La misma instalación de Python. El servidor simulado se comunica con el monitor en la propia computadora. |
 | Generar el ejecutable | Python para Windows, Tcl/Tk y PyInstaller 6.16.0, fijado en `requirements-dev.txt`. |
@@ -55,9 +55,9 @@ Todos los módulos de esta tabla forman parte de la biblioteca estándar. Las fu
 
 ![Monitor de Smart Parking V5 en demostración](../capturas/V5_Acceso_autorizado.png)
 
-![Configurar Wi-Fi](../capturas/Vista_V4_Configurar_WiFi.png)
+![Configurar Wi-Fi en el monitor V5 con una red de prueba](../capturas/V5_Configurar_WiFi.png)
 
-![Enviar instrucciones](../capturas/Vista_V4_Enviar_Ordenes.png)
+![Ventana de envío de instrucciones en el monitor V5](../capturas/V5_Enviar_Ordenes.png)
 
 - **Resumen**: capacidad 3, ocupadas, disponibles, acceso.
 - **Tres plazas**: distancia, estado libre/ocupado/desconocido, LED lógicos.

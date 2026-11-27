@@ -1,7 +1,7 @@
 SMART PARKING V5
 ESP32 + Arduino UNO | tres plazas
 
-Abre aplicacion/ABRIR_MONITOR.cmd si descargaste el código fuente. Si generaste SmartParkingMonitorV5.exe, puedes abrir el monitor con ese archivo. Conecta la computadora y el ESP32 a la misma red, escribe la dirección IP del ESP32 y pulsa Conectar.
+Abre SmartParkingMonitorV5.exe en Windows. Para ejecutarlo desde el código fuente, usa aplicacion/ABRIR_MONITOR.cmd. Conecta la computadora y el ESP32 a la misma red, escribe la dirección IP del ESP32 y pulsa Conectar.
 
 Para configurar la red, conecta la computadora a SmartParking-Setup, usa 192.168.4.1 y abre Configurar red Wi-Fi. Para instalar el firmware, crea config_private.h junto al sketch del ESP32 a partir de config_private.example.h y configura las tres claves en ese archivo local.
 

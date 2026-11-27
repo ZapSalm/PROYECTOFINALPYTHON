@@ -1,5 +1,9 @@
 # Registro de cambios
 
+## V5 — actualización del paquete
+
+- Ejecutable de Windows y capturas de configuración Wi-Fi y control remoto para Smart Parking V5.
+
 ## V5 — segundo avance
 
 - Ajuste de la detección de entrada a 5 cm con dos lecturas consecutivas.
@@ -7,7 +11,7 @@
 - Monitor de demostración actualizado al alcance de la maqueta.
 - Informe del segundo avance, capturas, logo y versiones de dependencias en la documentación.
 
-## V4
+## Funcionalidades de la base del proyecto
 
 - Monitor Python con tres plazas, cuatro sensores, diagnósticos, eventos, gráficas y exportaciones.
 - Configuración Wi-Fi AP/STA y credenciales del hotspot enviadas desde la aplicación.

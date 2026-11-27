@@ -14,7 +14,7 @@ build/
 dist/
 *.spec
 *.exe
-!/SmartParkingMonitorV4.exe
+!/SmartParkingMonitorV5.exe
 *.bin
 *.elf
 *.map

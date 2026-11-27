@@ -23,6 +23,7 @@ from urllib.parse import urlsplit, urlencode
 from urllib.request import Request, build_opener, ProxyHandler
 from urllib.error import HTTPError
 
+APP_TITLE = 'Smart Parking V5'
 IP_INICIAL = '192.168.4.1'
 AP_CONFIG_IP = '192.168.4.1'
 BG = '#0c1420'
@@ -386,7 +387,7 @@ class MonitorParqueo:
     def __init__(self, root, demo=False, host=IP_INICIAL):
         self.root, self.demo = root, demo
         self.started = time.monotonic()
-        self.root.title('Smart Parking V5')
+        self.root.title(APP_TITLE)
         sw, sh = self.root.winfo_screenwidth(), self.root.winfo_screenheight()
         self.root.geometry(f'{min(1180, max(920, sw-90))}x{min(850, max(620, sh-100))}')
         self.root.minsize(830, 550)
@@ -583,7 +584,7 @@ class MonitorParqueo:
             if len(data) == 1:
                 selected = data[0]['host']
             else:
-                w=tk.Toplevel(self.root); w.title('ESP32 encontrados'); w.geometry('540x265'); w.configure(bg=BG)
+                w=tk.Toplevel(self.root); w.title(f'{APP_TITLE} | ESP32 encontrados'); w.geometry('540x265'); w.configure(bg=BG)
                 f=self.panel(w); f.pack(fill='both',expand=True)
                 self.label(f,'Selecciona el ESP32 a utilizar',14,TEXT,True).pack(anchor='w')
                 choices=[f"{d['host']}  |  Red: {d.get('ssid') or 'no informada'}" for d in data]
@@ -604,7 +605,7 @@ class MonitorParqueo:
         if self.demo:
             messagebox.showinfo('Modo demo','Configurar red requiere un ESP32 con el firmware del proyecto.')
             return
-        w=tk.Toplevel(self.root); w.title('Smart Parking | Configurar Wi-Fi del ESP32')
+        w=tk.Toplevel(self.root); w.title(f'{APP_TITLE} | Configurar Wi-Fi del ESP32')
         w.geometry('720x570'); w.minsize(660,520); w.configure(bg=BG)
         outer=self.panel(w,px=23,py=18); outer.pack(fill='both',expand=True)
         self.label(outer,'CONFIGURAR RED DEL ESP32',17,TEXT,True).pack(anchor='w')
@@ -699,7 +700,7 @@ class MonitorParqueo:
         if self.demo:
             messagebox.showinfo('Modo demo','Los comandos reales están desactivados en modo demostración.')
             return
-        w=tk.Toplevel(self.root); w.title('Smart Parking | Enviar órdenes al ESP32')
+        w=tk.Toplevel(self.root); w.title(f'{APP_TITLE} | Enviar órdenes al ESP32')
         w.geometry('680x390'); w.configure(bg=BG)
         f=self.panel(w,px=22,py=17); f.pack(fill='both',expand=True)
         self.label(f,'CONTROL REMOTO — MAQUETA',17,TEXT,True).pack(anchor='w')
@@ -912,7 +913,7 @@ class MonitorParqueo:
         self.prev_state=s
 
     def _show_diagnostics(self):
-        w=tk.Toplevel(self.root); w.title('Smart Parking | Diagnóstico'); w.geometry('800x390'); w.configure(bg=BG)
+        w=tk.Toplevel(self.root); w.title(f'{APP_TITLE} | Diagnóstico'); w.geometry('800x390'); w.configure(bg=BG)
         f=tk.Frame(w,bg=BG,padx=22,pady=16); f.pack(fill='both',expand=True)
         self.label(f,'DIAGNÓSTICO DEL SISTEMA',18,TEXT,True).pack(anchor='w')
         self.label(f,'Interpretación de datos recibidos. No sustituye la revisión física del circuito.',10,MUTED).pack(anchor='w',pady=(1,12))
@@ -929,7 +930,7 @@ class MonitorParqueo:
         txt.insert('1.0','\n'.join(lines)); txt.config(state='disabled')
 
     def _show_events(self):
-        w=tk.Toplevel(self.root); w.title('Smart Parking | Eventos locales'); w.geometry('850x470'); w.configure(bg=BG)
+        w=tk.Toplevel(self.root); w.title(f'{APP_TITLE} | Eventos locales'); w.geometry('850x470'); w.configure(bg=BG)
         f=tk.Frame(w,bg=BG,padx=18,pady=16); f.pack(fill='both',expand=True)
         self.label(f,'EVENTOS DE ESTA SESIÓN',17,TEXT,True).pack(anchor='w')
         self.label(f,'Cambios observados mediante consultas HTTP; no son eventos certificados del hardware.',10,MUTED).pack(anchor='w',pady=(0,9))
@@ -961,7 +962,7 @@ class MonitorParqueo:
         if self.history_window is not None and self.history_window.winfo_exists():
             self.history_window.lift(); return
         w = tk.Toplevel(self.root); self.history_window = w
-        w.title('Smart Parking | Historial de sensores'); w.geometry('920x500'); w.minsize(650,380); w.configure(bg=BG)
+        w.title(f'{APP_TITLE} | Historial de sensores'); w.geometry('920x500'); w.minsize(650,380); w.configure(bg=BG)
         outer = tk.Frame(w,bg=BG,padx=18,pady=15); outer.pack(fill='both',expand=True)
         head = tk.Frame(outer,bg=BG); head.pack(fill='x')
         self.label(head,'HISTORIAL DE DISTANCIAS',17,TEXT,True).pack(side='left')
